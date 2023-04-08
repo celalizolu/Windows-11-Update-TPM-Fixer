@@ -23,7 +23,7 @@ Finally, the script removes the "readonly", "system", and "hidden" attributes fr
 
 To use the Windows 11 Update TPM Fixer, follow these steps:
 
-1. Download the "W11UP_TPM_FIX.zip" file and extract it.
+1. Download the source code and extract it.
 2. Right-click on the "W11UP_TPM_FIX.bat" file and choose "Run as administrator".
 3. When prompted, confirm that you want to proceed with the fix.
 4. Wait for the script to run and complete.
