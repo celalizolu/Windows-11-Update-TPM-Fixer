@@ -1,18 +1,30 @@
 @echo off
 color 0a
 setlocal EnableExtensions
+
+:: Check if script is running as an administrator
+echo Checking for administrator privileges...
+net session >nul 2>&1
+if %errorLevel% neq 0 (
+    echo This script requires administrator privileges.
+    echo Please run the script as an administrator and try again.
+    pause >nul
+    exit /b 1
+)
+echo Done.
+
+:: Get script name and path
 set "SCRIPT_NAME=%~nx0"
 set "SCRIPT_PATH=%~dp0"
 
+:: Display warning message
 echo Please confirm that you want to run this script to fix the Windows 11 update TPM issue.
-echo This script will disable TPM, Secure Boot, RAM and CPU checks during Windows setup, take ownership of a file, grant "Users" full permissions to the file, remove attributes from the file, delete the file, copy a new file, make the new file read-only, system, and hidden, and create an inbound rule to block the new file.
+echo This script will disable TPM, Secure Boot, RAM and CPU checks during Windows setup, take ownership of a file, grant "Users" full permissions to the file, remove attributes from the file, delete the file, copy a new file, make the new file read-only, system, and hidden, create an inbound rule to block the new file, create a system restore point, and update Windows Defender definitions.
 echo Proceeding with this script may have unintended consequences and could potentially harm your computer. Only run this script if you understand the risks and are confident in your ability to fix the issue.
 
+:: Prompt user to confirm script execution
 set /p "confirmation=Do you want to continue? (y/n)"
-
 if /i "%confirmation%" neq "y" goto end
-
-echo Fixing Windows 11 update TPM issue...
 
 :: Disable TPM, Secure Boot, RAM and CPU checks during Windows setup
 echo Disabling TPM, Secure Boot, RAM and CPU checks during Windows setup...
@@ -56,14 +68,4 @@ echo Done.
 :: Create inbound rule to block the file
 echo Creating inbound rule to block appraiserres.dll...
 set "RULE_NAME=Block appraiserres.dll"
-set "PROGRAM_PATH=C:\$WINDOWS.~BT\Sources\appraiserres.dll"
-netsh advfirewall firewall add rule name="%RULE_NAME%" dir=in action=block program="%PROGRAM_PATH%" enable=yes >nul 2>&1 || echo Failed to create inbound rule for appraiserres.dll.
-echo Done.
-
-:: Display completion message
-echo Windows 11 update TPM issue has been fixed. You can now update Windows 11 without any issues.
-echo Follow me on Instagram: @celalizolu
-pause >nul
-
-:end
-pause >nul
+set "PROGRAM_PATH=C:\$WINDOWS.~BT\Sources\appraiserres.dll
